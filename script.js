@@ -1,5 +1,6 @@
 let humanScore = 0;
 let computerScore = 0;
+const scoreBoard = document.querySelector(".scoreBoard");
 
 function getComputerChoice(){
 
@@ -16,45 +17,55 @@ function getComputerChoice(){
     return a%3;
 }
 
-function getHumanChoice(){
+/*function getHumanChoice(){
     let humanChoice = prompt("Make a turn!", null);
     console.log("You chose " + humanChoice + "!")
     if(humanChoice.toLowerCase() === "rock") return 0;
     if(humanChoice.toLowerCase() === "paper") return 1;
     if(humanChoice.toLowerCase() === "scissors") return 2;
     return null;
-}
+}*/
 
-function playRound(){
-   const computerChoice = getComputerChoice();
-   const humanChoice = getHumanChoice();
+function playRound(computerChoice, humanChoice){
+    scoreBoard.replaceChildren();
+    const p = document.createElement("p");
+    const final = document.createElement("p");
+    scoreBoard.appendChild(p);
    if(humanChoice === computerChoice){
-      console.log("Its a draw!, please repit the round!");
-      playRound();
+      p.textContent = "Its a draw!, please repit the round! Score " + humanScore + ":" + computerScore;
    }
    if(humanChoice - computerChoice === -1 || humanChoice - computerChoice === 2) {
       computerScore++;
-      console.log("You lose this round! Current score " + humanScore + ":" + computerScore);
-      return;
+      if(computerScore>=5){
+        final.textContent = "You have lost the game, better luck next time! Final score " + humanScore + ":" + computerScore;
+        computerScore = 0;
+        humanScore = 0;
+        scoreBoard.appendChild(final);
+        return;
+      }
+      p.textContent = "You lose this round! Current score " + humanScore + ":" + computerScore;
    }
    if(humanChoice - computerChoice === 1 || humanChoice - computerChoice === -2) {
       humanScore++;
-      console.log("You win this round! Current score " + humanScore + ":" + computerScore);
-      return;
+      if(humanScore >= 5){
+        final.textContent = "You have won the game, congratulations! Final score " + humanScore + ":" + computerScore;
+        computerScore = 0;
+        humanScore = 0;
+        scoreBoard.appendChild(final);
+        return;
+      }
+      p.textContent = "You win this round! Current score " + humanScore + ":" + computerScore;
    }
 }
 
-function playGame(){
-    playRound();
-    playRound();
-    playRound();
-    playRound();
-    playRound();
-    if(humanScore > computerScore) console.log("Congatulations you have won the game!");
-    else console.log("You have lost the game, better luck next time!");
-    return;
-}
 
+const rockBtn = document.querySelector("#btnOne");
+const paperBtn = document.querySelector("#btnTwo");
+const scissBtn = document.querySelector("#btnTree");
 
-playGame();
+rockBtn.addEventListener("click", () => playRound(getComputerChoice(), 0));
+paperBtn.addEventListener("click",() => playRound(getComputerChoice(), 1));
+scissBtn.addEventListener("click",() => playRound(getComputerChoice(), 2));
+
+/*playGame();*/
 
